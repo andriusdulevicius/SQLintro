@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mysql = require('mysql');
+const path = require('path');
 
 //set up connection
 const db = mysql.createConnection({
@@ -18,9 +19,12 @@ db.connect((err) => {
 const app = express();
 
 app.use(morgan('common'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: 'false' }));
+app.use(express.static(path.join(__dirname, 'static')));
 
 app.get('/', (req, res) => {
-  res.send('Express veikia normaliai');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/createdb', (req, res) => {
@@ -51,19 +55,22 @@ app.get('/table/create', (req, res) => {
 });
 
 //add new post
-app.get('/new/post', (req, res) => {
-  const newPost = { title: 'Third post title', body: 'Third sql body sent into table' };
+app.post('/newpost', (req, res) => {
+  console.log(req.body);
+
+  // const newPost = { title: 'Third post title', body: 'Third sql body sent into table' };
   const sql = 'INSERT INTO posts SET ?';
-  db.query(sql, newPost, (err, result) => {
+  db.query(sql, req.body, (err, result) => {
     if (err) throw err.stack;
     console.log(result);
-    res.json({ result, msg: 'post created' });
+    res.redirect('/post');
+    // res.json({ result, msg: 'post created' });
   });
 });
 
 //get all posts
 
-app.get('/allposts', (req, res) => {
+app.get('/post', (req, res) => {
   const sql = 'SELECT * FROM posts';
   db.query(sql, (err, result) => {
     if (err) throw err;
