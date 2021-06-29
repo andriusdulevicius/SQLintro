@@ -73,11 +73,22 @@ app.get('/allposts', (req, res) => {
 });
 
 app.get('/post/:id', (req, res) => {
-  const sql = `SELECT * FROM posts WHERE id = ${req.params.id}`;
+  const sql = `SELECT * FROM posts WHERE id = ${db.escape(req.params.id)}`; // apsaugo nuo hakeriu,  tiesiogiai paduodant (sql injection)
   db.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
     res.json(result);
+  });
+});
+
+app.get('/post/:id/update', (req, res) => {
+  //is vartotojo formos grizta atnaujinta title
+  const newTitle = 'Oba naaa updatinau!';
+  const sql = `UPDATE posts SET title = ${db.escape(newTitle)} WHERE id = ${db.escape(req.params.id)}`; // apsaugo nuo hakeriu,  tiesiogiai paduodant (sql injection)
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.redirect('/allposts');
   });
 });
 
