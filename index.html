@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SQL</title>
     <script defer src="./posts.js"></script>
+    <script defer src="./authors.js"></script>
   </head>
   <body>
     <h1>Node SQL</h1>
@@ -16,8 +17,27 @@
       <button type="submit">Create post</button>
     </form>
     <h2>Esami postai</h2>
-    <ul>
-      <li><a href="/post">Post 1</a></li>
-    </ul>
+    <ul id="main-ul"></ul>
+
+    <a href="/authors">All authors</a> <br />
+    <a href="/authors/young">Young authors</a> <br />
+    <a href="/authors/male">Male authors</a> <br />
+    <form action="/authors/addnew" method="POST" autocomplete="off">
+      <input type="text" placeholder="name" name="name" /> <br />
+      <input type="number" placeholder="age" name="age" /> <br />
+      <select name="sex" id="sex">
+        <option value="male">male</option>
+        <option value="female">female</option>
+        <option value="other">other</option>
+      </select>
+      <br />
+      <select name="post_id" id="post_id"></select>
+
+      <button type="submit">Create author</button>
+    </form>
+
+    <h2>Postu autoriai</h2>
+
+    <ul id="authors-ul"></ul>
   </body>
 </html>

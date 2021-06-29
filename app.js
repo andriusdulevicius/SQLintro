@@ -106,7 +106,83 @@ app.get('/post/:id/delete', (req, res) => {
   db.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
-    res.redirect('/allposts');
+    res.redirect('/post');
   });
 });
+
+//uzduotis sukurti authors lentele
+
+//create authors table
+app.get('/authors/table/create', (req, res) => {
+  const sql = `
+  CREATE TABLE authors(
+    au_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      name VARCHAR(25) NOT NULL,
+      age INT(2) NOT NULL,
+      sex VARCHAR(10) NOT NULL,
+      post_id INT  NOT NULL,
+      PRIMARY KEY (au_id)
+  )`;
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.json({ result, msg: 'autoriu lentele sukurta' });
+  });
+});
+
+//get all authors
+
+app.get('/authors', (req, res) => {
+  const sql = 'SELECT * FROM authors';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.json(result);
+  });
+});
+//get all young authors age <30
+
+app.get('/authors/young', (req, res) => {
+  const sql = 'SELECT * FROM authors WHERE age < 30';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.json(result);
+  });
+});
+
+//get all female authors
+
+app.get('/authors/male', (req, res) => {
+  const sql = `SELECT * FROM authors WHERE sex = 'male'`;
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.json(result);
+  });
+});
+
+//add new author
+app.post('/authors/addnew', (req, res) => {
+  console.log(req.body);
+
+  // const newAuthor = { name: 'Sigis', age: 35, sex: 'male', post_id: 123 };
+  const sql = 'INSERT INTO authors SET ?';
+  db.query(sql, req.body, (err, result) => {
+    if (err) throw err.stack;
+    console.log(result);
+    res.redirect('/');
+    // res.json({ result, msg: 'post created' });
+  });
+});
+
+app.get('/author/:id', (req, res) => {
+  const sql = `SELECT * FROM authors WHERE au_id = ${db.escape(req.params.id)}`; // apsaugo nuo hakeriu,  tiesiogiai paduodant (sql injection)
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.json(result);
+  });
+});
+
 app.listen('3000', console.log('server running on port 3000'));
