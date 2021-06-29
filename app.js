@@ -92,4 +92,14 @@ app.get('/post/:id/update', (req, res) => {
   });
 });
 
+//siaip su get niekad nedeletinam , cia tik del sql operaciju naudojam get requesta , del paprastumo
+app.get('/post/:id/delete', (req, res) => {
+  //is vartotojo formos grizta atnaujinta title
+  const sql = `DELETE FROM posts WHERE id = ${db.escape(req.params.id)}`; // apsaugo nuo hakeriu,  tiesiogiai paduodant (sql injection)
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.redirect('/allposts');
+  });
+});
 app.listen('3000', console.log('server running on port 3000'));
