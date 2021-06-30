@@ -186,3 +186,10 @@ app.get('/author/:id', (req, res) => {
 });
 
 app.listen('3000', console.log('server running on port 3000'));
+
+//dvieju lenteliu sujungimui :
+
+// SELECT posts.title, authors.name, authors.age
+// FROM posts
+// INNER JOIN authors
+// ON posts.id = authors.post_id;
